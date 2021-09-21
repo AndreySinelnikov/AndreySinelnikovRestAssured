@@ -9,10 +9,10 @@
 
 ```xml
     <project>
-      [...]
+      [...] 
       <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source></maven.compiler.source>
+        <maven.compiler.target></maven.compiler.target>
         <rest-assured-all.version>4.4.0</rest-assured-all.version>
         <testng.version>7.4.0</testng.version>
         <maven-surefire-plugin>3.0.0-M5</maven-surefire-plugin>
@@ -39,7 +39,6 @@
           <groupId>io.rest-assured</groupId>
           <artifactId>rest-assured</artifactId>
           <version>${rest-assured.version}</version>
-          <scope>test</scope>
         </dependency>
     
         <dependency>
@@ -62,10 +61,13 @@
   </project>
 ```
 
-2. IN *src/test/resources*, ADD TestNG xml file pointing to test location.
-3. IN *pom.xml*, ADD value to _<maven.surefire.plugin.suiteXmlFile>_ 
+2. IN *pom.xml*, ADD _<maven.compiler.source>_ and _<maven.compiler.target>_ 
+   property values specifying desired compiler settings.
+3. IN *src/test/resources*, ADD TestNG xml file pointing to test location.
+4. IN *pom.xml*, ADD value to _<maven.surefire.plugin.suiteXmlFile>_ 
    so it points to TestNG xml file location. Update default profile accordingly.
    (EXAMPLE: _${project.basedir}/src/test/resources/...}_)
+   
    
 --------
 #### GOAL: Set static imports for common REST Assured-related methods
@@ -81,19 +83,20 @@
    
 ----------
 
-#### GOAL: Set up Apache HTTP Components dependency for Java API tests
+#### GOAL: Utilize Apache HTTP Status Codes for Java API tests
 
 NOTE: Apache HTTP components offer unified set of things like status codes,
         eliminating problems stemming from coding them from scratch.
   
-1. IN *pom.xml*, ADD dependency from Maven Central Repo. 
-   (PENDING: 'httpcore-nio' works, might investigate it later, though)
+1. IN *pom.xml*, ADD 'httpcore-nio' artifact dependency from Maven Central Repo.
+2. IN relevant class, ADD `import org.apache.http.HttpStatus;`.
    
 ----------
 
 #### GOAL: Outline basic project structure
 
-NOTE: The following structure is *
+NOTE: The following structure (courtesy of EPAM training center) 
+      should offer a fine decoupled template for tests utilizing DTO.
 
 * *src/main/java/service* contains:
   - Common Service class 
@@ -101,11 +104,12 @@ NOTE: The following structure is *
     specify common behavior of requests, i.e. base URI, headers, logging; <br>
     also, provides methods that wrap baseline REST Assured requests and
     may include low-level response checks, i.e. status code assertions)
-    
   - REST {service_name} Service class for each API service 
     (provides higher-level methods corresponding to actual API methods)
-    
-  - REST {service_name} Assertions class for each API service (TODO: check if true!)
+  - REST {service_name} Assertions class for each API service 
+    (provides methods that allow comparison between DTOs by desired fields, 
+    though DTO/request comparison is fine too. Methods return `this` to allow chaining.
+    NOTE: Putting error messages here also helps to avoid duplication.)
     
   - URI class (holds values for endpoints to be appended to baseURI)
     

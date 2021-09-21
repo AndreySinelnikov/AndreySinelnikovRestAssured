@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ErrorDto {
+public class SuggestionDto {
     private Long code;
     private Long pos;
     private Long row;
@@ -19,5 +19,3 @@ public class ErrorDto {
     private String word;
     private List<String> s;
 }
-
-// {"code":1,"pos":0,"row":0,"col":0,"len":5,"word":"bleck","s":["black","block","blek"]}
