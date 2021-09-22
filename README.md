@@ -115,7 +115,7 @@ NOTE: The following structure (courtesy of EPAM training center)
     
 * *src/main/java/dto* contains Data Transfer Object classes.
     
- !!!!!! FINALIZE
+
 
 -----------
 

@@ -22,10 +22,23 @@ public class RestCheckTextService extends CommonService {
         Map<String, Object> params = new HashMap<>();
         params.put("text", text);
 
+        return getResponseBodyAsSpellingErrorDtoArray(params);
+    }
+
+    // Postman requests show 'lang' parameter doesn't actually affect anything, so Yandex Speller options only
+    public SpellingErrorDto[] checkSingleTextWithOptions(String text, int optionsCode) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("text", text);
+        params.put("options", optionsCode);
+
+        return getResponseBodyAsSpellingErrorDtoArray(params);
+    }
+
+    private static SpellingErrorDto[] getResponseBodyAsSpellingErrorDtoArray(Map<String, Object> requestParameters) {
         return
             new Gson().fromJson(
                 new CommonService()
-                    .getWithParams(CHECK_TEXT_URI, params)
+                    .getWithParams(CHECK_TEXT_URI, requestParameters)
                     .getBody().asString(), SpellingErrorDto[].class);
     }
 }
