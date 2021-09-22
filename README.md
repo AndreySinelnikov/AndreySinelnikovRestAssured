@@ -13,9 +13,9 @@
       <properties>
         <maven.compiler.source></maven.compiler.source>
         <maven.compiler.target></maven.compiler.target>
-        <rest-assured-all.version>4.4.0</rest-assured-all.version>
-        <testng.version>7.4.0</testng.version>
-        <maven-surefire-plugin>3.0.0-M5</maven-surefire-plugin>
+        <rest-assured-all.version></rest-assured-all.version>
+        <testng.version></testng.version>
+        <maven-surefire-plugin></maven-surefire-plugin>
         <maven.surefire.plugin.suiteXmlFile></maven.surefire.plugin.suiteXmlFile>
       </properties>
     
@@ -61,8 +61,8 @@
   </project>
 ```
 
-2. IN *pom.xml*, ADD _<maven.compiler.source>_ and _<maven.compiler.target>_ 
-   property values specifying desired compiler settings.
+2. IN *pom.xml* property section, ADD property values specifying desired 
+   compiler settings and dependency versions.
 3. IN *src/test/resources*, ADD TestNG xml file pointing to test location.
 4. IN *pom.xml*, ADD value to _<maven.surefire.plugin.suiteXmlFile>_ 
    so it points to TestNG xml file location. Update default profile accordingly.
@@ -152,6 +152,31 @@ NOTE: JSON fields that are themselves objects of different class
       will probably have to implement another DTO class for these objects).
 
 ------------
+
+#### GOAL: Outline basic test structure for this project template
+
+* First, a test utilizes API method service to get a response in the form of a DTO array.
+  EXAMPLE:
+  `SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleText(text);`
+  
+* Then a test utilizes this API method's Assertions class to run a high-level assertion (or assertion chain).
+   EXAMPLE:
+  `new RestCheckTextServiceAssertions(spellingErrors).verifySpellingErrorsQuantity(expectedNumberOfErrors);`
+  
+------------
+
+#### GOAL: Add test ID to data provider items
+
+NOTE: Test ID is an additional clarification of a role of a given row of data in data provider.
+
+1. IN test method signature, ADD a String 'testId' parameter before the parameters 
+   actually used in a test.
+   
+2. IN each row of data in this test's data provider, ADD a descriptive element before the values actually used in the test.
+
+-------------
+
+
    
 
 

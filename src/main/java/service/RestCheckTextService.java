@@ -3,7 +3,7 @@ package service;
 import static service.URI.CHECK_TEXT_URI;
 
 import com.google.gson.Gson;
-import dto.SuggestionDto;
+import dto.SpellingErrorDto;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class RestCheckTextService extends CommonService {
         return restCheckTextService;
     }
 
-    public SuggestionDto[] checkSingleText(String text) {
+    public SpellingErrorDto[] checkSingleText(String text) {
         Map<String, Object> params = new HashMap<>();
         params.put("text", text);
 
@@ -26,6 +26,6 @@ public class RestCheckTextService extends CommonService {
             new Gson().fromJson(
                 new CommonService()
                     .getWithParams(CHECK_TEXT_URI, params)
-                    .getBody().asString(), SuggestionDto[].class);
+                    .getBody().asString(), SpellingErrorDto[].class);
     }
 }

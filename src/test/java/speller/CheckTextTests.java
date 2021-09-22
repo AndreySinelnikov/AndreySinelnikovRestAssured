@@ -2,31 +2,31 @@ package speller;
 
 import static io.restassured.RestAssured.given;
 
-import dto.SuggestionDto;
-import io.restassured.response.Response;
-import java.util.HashMap;
-import java.util.Map;
+import dto.SpellingErrorDto;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import service.CommonService;
+import service.RestCheckTextService;
+import service.RestCheckTextServiceAssertions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static service.URI.CHECK_TEXT_URI;
 
 public class CheckTextTests extends BaseTest {
 
-    @Test
-    public void test() {
 
-        //ErrorDto error = restCheckTextService.checkSingleText("blek");
-        SuggestionDto[] suggestion = restCheckTextService.checkSingleText("black");
-        SuggestionDto[] suggestion2 = restCheckTextService.checkSingleText("abberation");
-        //System.out.println(suggestion[0].getS());
+    @Test(description = "Entered text returns expected number of suggestions", dataProvider = "suggestionNumberCheck")
+    public void enteredTextReturnsExpectedNumberOfSuggestions(String testId, String text, int expectedNumberOfErrors) {
 
+        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleText(text);
 
+        new RestCheckTextServiceAssertions(spellingErrors)
+            .verifySpellingErrorsQuantity(expectedNumberOfErrors);
     }
 
-    //    @Test
-    //    public void singleIncorrectEnglishWord_ReturnsSingleSuggestion() {
-    //
-    //    }
+    @DataProvider(name = "suggestionNumberCheck")
+    public Object[][] enteredTextReturnsExpectedNumberOfSuggestionsData() {
+        return new Object[][] {
+            {"0 SPELLING ERRORS", "Black snake living in a black hole, hiding from the sun", 0},
+            {"1 SPELLING ERROR", "Black snake living in a black hole ttil the game is won", 1},
+        };
+    }
 }
+

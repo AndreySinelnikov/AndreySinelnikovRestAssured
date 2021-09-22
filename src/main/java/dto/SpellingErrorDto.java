@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class SuggestionDto {
+public class SpellingErrorDto {
     private Long code;
     private Long pos;
     private Long row;
