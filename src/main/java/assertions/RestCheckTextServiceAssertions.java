@@ -1,4 +1,4 @@
-package service;
+package assertions;
 
 import dto.SpellingErrorDto;
 import java.util.Collection;
@@ -23,7 +23,7 @@ public class RestCheckTextServiceAssertions {
         return this;
     }
 
-    // chain after verifySpellingErrorsQuantity(1)
+    // chain after spellingErrorQuantityIsEqualTo(1)
     public RestCheckTextServiceAssertions spellingErrorCodeIsEqualTo(int errorCode) {
         assertThat(spellingErrors[0].getCode())
             .as("Error code should be equal to expected")

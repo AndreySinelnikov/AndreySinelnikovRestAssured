@@ -1,15 +1,30 @@
 package speller;
 
-import static speller.ErrorCodes.ERROR_UNKNOWN_WORD;
+import static parameters.ErrorCode.ERROR_UNKNOWN_WORD;
 
 import dto.SpellingErrorDto;
+import java.util.Properties;
+import lombok.SneakyThrows;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import service.RestCheckTextService;
-import service.RestCheckTextServiceAssertions;
-import service.SpellerOptions;
+import assertions.RestCheckTextServiceAssertions;
+import parameters.SpellerOptions;
 
-public class CheckTextTests extends BaseTest {
+public class CheckTextTests {
+    RestCheckTextService restCheckTextService;
+    Properties props;
+    String propertyFileName = "test.properties";
+
+    @SneakyThrows
+    @BeforeClass
+    public void setUp() {
+        props = new Properties();
+        props.load(getClass().getClassLoader().getResourceAsStream(propertyFileName));
+        restCheckTextService = new RestCheckTextService(props.getProperty("base_uri"),
+            props.getProperty("checkText_uri"));
+    }
 
     @DataProvider(name = "spellingErrorNumberCheck")
     public Object[][] sentTextReturnsExpectedNumberOfSpellingErrorsData() {
@@ -23,7 +38,8 @@ public class CheckTextTests extends BaseTest {
           dataProvider = "spellingErrorNumberCheck")
     public void sentTextReturnsExpectedNumberOfSpellingErrors(String testId,
                                                               String text, int expectedNumberOfErrors) {
-        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleText(text);
+
+        SpellingErrorDto[] spellingErrors = restCheckTextService.checkSingleText(text, 0);
 
         new RestCheckTextServiceAssertions(spellingErrors)
             .spellingErrorQuantityIsEqualTo(expectedNumberOfErrors);
@@ -33,23 +49,23 @@ public class CheckTextTests extends BaseTest {
     @Test(description = "Sent text returns single spelling error with an expected error code")
     public void sentTextReturnsSpellingErrorWithExpectedErrorCode() {
         String text = "каракозябра";
-        int expectedErrorCode = ERROR_UNKNOWN_WORD;
+        int expectedErrorCode = ERROR_UNKNOWN_WORD.code;
 
-        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleText(text);
+        SpellingErrorDto[] spellingErrors = restCheckTextService.checkSingleText(text, 0);
 
         new RestCheckTextServiceAssertions(spellingErrors)
             .spellingErrorQuantityIsEqualTo(1)
             .spellingErrorCodeIsEqualTo(expectedErrorCode);
     }
 
-    @Test(description = "Ignore digits options excludes words mixed with digits from spellcheck")
+    @Test(description = "Ignore digits option excludes words mixed with digits from spellcheck")
     public void wordMixedWithIgnoredDigitsReturnsNoSpellingErrors() {
         String text = "aberr3tion";
         int options = new SpellerOptions()
             .setIgnoreDigits()
             .getOptionsCode();
 
-        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleTextWithOptions(text,
+        SpellingErrorDto[] spellingErrors = restCheckTextService.checkSingleText(text,
             options);
 
         new RestCheckTextServiceAssertions(spellingErrors)
@@ -65,7 +81,7 @@ public class CheckTextTests extends BaseTest {
             .setIgnoreUrls()
             .getOptionsCode();
 
-        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleTextWithOptions(text,
+        SpellingErrorDto[] spellingErrors = restCheckTextService.checkSingleText(text,
             options);
 
         new RestCheckTextServiceAssertions(spellingErrors)
@@ -78,7 +94,7 @@ public class CheckTextTests extends BaseTest {
         String text = "I tiped al thes louse textt and all i got was eror sugestions";
         String expectedSuggestion = "the";
 
-        SpellingErrorDto[] spellingErrors = new RestCheckTextService().checkSingleText(text);
+        SpellingErrorDto[] spellingErrors = restCheckTextService.checkSingleText(text, 0);
 
         new RestCheckTextServiceAssertions(spellingErrors)
             .containsSuggestedCorrectSpelling(expectedSuggestion);
