@@ -4,24 +4,21 @@ import static parameters.ErrorCode.ERROR_UNKNOWN_WORD;
 
 import dto.SpellingErrorDto;
 import java.util.Properties;
-import lombok.SneakyThrows;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import service.RestCheckTextService;
 import assertions.RestCheckTextServiceAssertions;
 import parameters.SpellerOptions;
+import utils.PropertyReader;
 
 public class CheckTextTests {
     RestCheckTextService restCheckTextService;
     Properties props;
-    String propertyFileName = "test.properties";
 
-    @SneakyThrows
     @BeforeClass
     public void setUp() {
-        props = new Properties();
-        props.load(getClass().getClassLoader().getResourceAsStream(propertyFileName));
+        props = new PropertyReader().readPropertiesFromFile("test.properties");
         restCheckTextService = new RestCheckTextService(props.getProperty("base_uri"),
             props.getProperty("checkText_uri"));
     }
