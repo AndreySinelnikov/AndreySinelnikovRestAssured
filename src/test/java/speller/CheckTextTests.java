@@ -3,6 +3,7 @@ package speller;
 import static parameters.ErrorCode.ERROR_UNKNOWN_WORD;
 
 import dto.SpellingErrorDto;
+import java.io.IOException;
 import java.util.Properties;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;

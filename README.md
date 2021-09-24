@@ -106,6 +106,8 @@ NOTE: The following structure (courtesy of EPAM training center)
     may include low-level response checks, i.e. status code assertions)
   - REST {service_name} Service class for each API service 
     (provides higher-level methods corresponding to actual API methods)
+    
+* *src/main/java/assertions* contains:
   - REST {service_name} Assertions class for each API service 
     (provides methods that allow comparison between DTOs by desired fields, 
     though DTO/request comparison is fine too. Methods return `this` to allow chaining.
@@ -114,6 +116,9 @@ NOTE: The following structure (courtesy of EPAM training center)
   - URI class (holds values for endpoints to be appended to baseURI)
     
 * *src/main/java/dto* contains Data Transfer Object classes.
+
+* *src/main/java/parameters* contains utility classes that make Yandex Speller 
+  parameters and codes used throughout the program more human-readable.
     
 
 
